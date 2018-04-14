@@ -30,11 +30,14 @@ var updateChart = function (count) {
 
 	for (var j = 0; j < count; j++) {
 
-    for(var i = 0, i < num_val; i++){
+    //text_string = //CALL PHP
+    //yVal  =extract floating point numbers
+    //xVal  = deduce from previous xVal + length of yVal
 
-      xVal = xVal + updateInterval/20;
-    }
 		yVal = yVal +  Math.round(5 + Math.random() *(-10));
+
+    //for i in range len(xval): dps.push xVal[i] et yVal[i]
+
 		dps.push({
 			x: xVal,
 			y: yVal
