@@ -1,0 +1,19 @@
+
+.box1{
+    background-color:   #ADD8E6;
+}
+.box2{
+    background-color: white;
+}
+.box3{
+    background-color: #E0FFFF;
+}
+.container{
+    max-width:540px;
+    max-height: 960px;
+    border-style: solid;
+    border-width: thin;
+}
+.center{
+    text-align:center;
+}
