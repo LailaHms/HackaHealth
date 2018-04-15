@@ -2,11 +2,11 @@ from ClosedLoopEmgControl import ClosedLoopEmgControl
 
 def main():
     slidingWindowSamples = 10
-    outputRate = 1
+    outputRate = 5
     decoderType = "thresholdingMav"
     decoderInfo = {}
-    decoderInfo["electrodesToMusclesMap"] = ["flex","flex","flex","ext","ext","ext"]
-    decoderInfo["calibrationTime"] = 10#s
+    decoderInfo["electrodesToMusclesMap"] = ["flex","flex","flex","flex","ext","ext","ext","ext"]
+    decoderInfo["calibrationTime"] = 10 #s
 
     clc = ClosedLoopEmgControl(slidingWindowSamples,outputRate,decoderType,decoderInfo)
     #clc.calibrate()
