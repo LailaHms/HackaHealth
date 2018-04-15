@@ -54,13 +54,13 @@ class ClosedLoopEmgControl():
     def check_stop(self):
         while True:
             time.sleep(0.1)
-            if read_value("disconnet"):
+            # if read_value("disconnet"): # TODO
+            if False:
                 self._stopControl = True
                 self._emgCnt.set_stopControl(True)
                 self._motorCnt.set_stopControl(True)
                 self._threadEmg.join()
                 self._threadMotor.join()
-
                 break
 
     def calibrate(self):
@@ -71,5 +71,5 @@ class ClosedLoopEmgControl():
                     emgSignals = self._emgCnt.get_myo_data(self._decoderInfo["calibrationTime"])
                     print emgSignals
                     print np.array(emgSignals).shape()
-                    # self._decoder.calibrate_threshold(emgSignals)
+                    self._decoder.calibrate_threshold(emgSignals)
                 break

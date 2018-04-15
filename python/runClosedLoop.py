@@ -9,7 +9,7 @@ def main():
     decoderInfo["calibrationTime"] = 10#s
 
     clc = ClosedLoopEmgControl(slidingWindowSamples,outputRate,decoderType,decoderInfo)
-    clc.calibrate()
+    # clc.calibrate()
     clc.start()
 
 
