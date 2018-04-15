@@ -40,14 +40,14 @@
 	<div id="slider" class="col-sm">
 	  <figure>
 	    <img src="speed.jpg" alt>
-	    <img src="taj-mahal.jpg" alt>
-	    <img src="ibiza.jpg" alt>
-	    <img src="ankor-wat.jpg" alt>
-	    <img src="austin-fireworks.jpg" alt>
+	    <img src="speed.jpg" alt>
+	    <img src="speed.jpg" alt>
+	    <img src="speed.jpg" alt>
+	    <img src="speed.jpg" alt>
 	  </figure>
 	</div>
       <div class="col-sm align-self-start box2 center">
-					<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+	<div id="chartContainer" style="height: 300px; width: 100%;"></div>
       </div>
 
     </div>
