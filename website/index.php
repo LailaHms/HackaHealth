@@ -15,7 +15,7 @@
   <body>
     <div class="container">
         <div class="row row1">
-        <div class="col align-self-start">
+        <div class="col-5 col align-self-start">
           <?php
             $connectFile = "tmp/connect.txt";
             if (!file_exists($connectFile)){
@@ -23,19 +23,29 @@
               echo '<button type="button" id="connect" class="btn btn-success">Connect</button>';
             }
             else{
+               echo '<img src="res/wifi_green.png" style="width:20%; margin-right: 10px;">';
               echo '<button type="button" id="disconnect" class="btn btn-danger">Disconnect</button>';
             }
           ?>
         </div>
-        <div class="col align-self-center"></div>
+        <div class="col align-self-center">
+          <center>
+          <?php
+              echo '<button type="button" id="calibrate" class="btn btn-warning">Calibrate</button>';
+          ?>
+        </center>
+        </div>
         <div class="col align-self-end" style="text-align: right;">
-          <img src="res/gears.png" style="width:25%;">
+            <?php
+                echo '<button type="button" id="plot" class="btn btn-info">Plots</button>';
+            ?>
+          <img src="res/gears.png" style="width:30%;">
           <!-- <button type="button" class="btn btn-outline-secondary">Settings</button>  -->
         </div>
       </div>
       <div class="row row2">
         <div class="col-sm align-self-start">
-            Strength<br/>
+
         </div>
         <div class="col-sm align-self-center center">
             <img src="res/strong.png" style="width:80%;"/><br/>
@@ -45,26 +55,30 @@
       </div>
       <div class="row row2">
         <div class="col-sm align-self-center center">
+          Strength<br/>
           <input id="strength" type="range" style="width: 80%;"/>
         </div>
       </div>
       <div class="row row3">
         <div class="col-sm align-self-start">
-            Speed<br/>
+
         </div>
         <div class="col-sm align-self-center center">
-            <img src="res/speed.png" style="width:80%;"/><br/>
+            <img src="res/speedometer.svg" style="width:80%;"/><br/>
         </div>
         <div class="col align-self-end">
         </div>
       </div>
       <div class="row row3">
         <div class="col-sm align-self-center center">
+          Speed<br/>
           <input id="speed" type="range" style="width: 80%;"/>
         </div>
       </div>
       <div class="row row2">
+
         <div class="col-sm align-self-start center positions">
+
           <div class="arms">
             <img src="res/arm1.png" id="arm1" style="width:10%; position: absolute; z-index: 2;">
             <img src="res/hand.png" id="hand1" style="width:13%; position: absolute;  z-index: 1;">
@@ -74,6 +88,7 @@
             <img src="res/hand.png" id="hand3" style="width:13%; position: absolute;  z-index: 1;">
           </div>
           <div style="margin-top: ">
+            Position<br/>
             Min<input id="min" type="range" style="width: 80%;"/><br/>
             Ref<input id="ref" type="range" style="width: 80%;"/><br/>
             Max<input id="max" type="range" style="width: 80%;"/>
@@ -83,7 +98,6 @@
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <scirpt>
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
@@ -91,7 +105,7 @@
       $(function() {
           var div = $('.arms');
           var width = div.width();
-          
+
           div.css('height', width*0.5);
           $("#arm1").css('top','5px');
           $("#hand1").css('top',$("#arm1").position().top + $("#arm1").height() * 0.85+'px');
@@ -169,10 +183,16 @@
         $.ajax({ url: link });
       });
       $( "#connect" ).click(function() {
-        $.ajax({ url: 'startDevice.php' });
+        $.ajax({ url: 'startDevice.php' , complete: function(){window.location.href='index.php';}});
       });
-      $( "#dicconnect" ).click(function() {
-        $.ajax({ url: 'stopDevice.php' });
+      $( "#calibrate" ).click(function() {
+        window.location.href='calibrate.php'
+      });
+      $( "#plot" ).click(function() {
+        window.location.href='plot.php'
+      });
+      $( "#disconnect" ).click(function() {
+        $.ajax({ url: 'stopDevice.php' , complete: function(){window.location.href='index.php';}});
       });
     </script>
   </body>
