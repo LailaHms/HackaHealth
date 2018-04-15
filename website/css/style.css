@@ -1,12 +1,15 @@
 
-.box1{
-    background-color:   #ADD8E6;
+.row1{
+	padding: 5px;
+	background-color: #2F5597;
 }
-.box2{
-    background-color: white;
+.row2{
+	padding: 2px;
+	background-color: white;
 }
-.box3{
-    background-color: #E0FFFF;
+.row3{
+	padding: 2px;
+	background-color: #E0FFFF;
 }
 .container{
     max-width:540px;
@@ -16,4 +19,9 @@
 }
 .center{
     text-align:center;
+}
+
+canvas {
+    width: 99%;
+    height: 100%;
 }
