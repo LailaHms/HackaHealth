@@ -1,4 +1,4 @@
 <?php
-	$command 	= escapeshellcmd("gnome-terminal tab -e 'python3 connection.py'");
+	$command 	= escapeshellcmd("gnome-terminal tab -e 'python2.7 ../python/connection.py disconnect'");
 	$output 	= shell_exec($command);
 ?>
