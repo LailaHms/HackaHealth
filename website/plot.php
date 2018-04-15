@@ -37,15 +37,17 @@
         <!-- <button type="button" class="btn btn-outline-secondary">Settings</button>  -->
       </div>
     </div>
-	<div id="slider" class="col-sm">
-	  <figure>
-	    <img src="speed.jpg" alt>
-	    <img src="speed.jpg" alt>
-	    <img src="speed.jpg" alt>
-	    <img src="speed.jpg" alt>
-	    <img src="speed.jpg" alt>
-	  </figure>
-	</div>
+    <div class="row">
+        <div class="col col align-self-start center">
+            <img src="res/arrow-point-to-right.svg" style="width:50%;" id="left" />
+        </div>
+        <div class="col col align-self-center center">
+            <img src="res/myo_1.png"  style="width:100%;" id="sensorDisplay"/>
+        </div>
+        <div class="col col align-self-end center">
+            <img src="res/arrow-point-to-right.svg" style="width:50%;" id="right"/>
+        </div>
+    </div>
       <div class="col-sm align-self-start box2 center">
 	<div id="chartContainer" style="height: 300px; width: 100%;"></div>
       </div>
@@ -75,8 +77,9 @@
 });</script>
 
 <script>
+var sensor_value = 0;
 
-window.onload = function () {
+window.onload=function () {
 
 var dps = []; // dataPoints
 var chart = new CanvasJS.Chart("chartContainer", {
@@ -103,7 +106,16 @@ var updateInterval = 100; //ms
 var sampling_freq = 50;
 var dataLength = 500; // number of dataPoints visible at any point
 var count = 0;
-var sensor_value = 2;
+var sensor_value = 0;
+function setChartColor(sensor_value){
+	if(sensor_value%2== 0){
+		chart["data"][0].lineColor = "#4F81BC";
+	}
+	else{
+		chart["data"][0].lineColor = "#cc0000";
+	}	
+}
+
 
 var updateChart = function (text_string, sensor_value,count) {
 
@@ -129,9 +141,31 @@ var updateChart = function (text_string, sensor_value,count) {
 	console.log(dps.length)
 
 
-
 	chart.render();
 };
+
+$("#left").click(function(){
+	if(sensor_value > 0){
+		sensor_value = sensor_value  - 1;
+	}
+	else{
+		sensor_value = 7;
+	}
+	$('#sensorDisplay').attr('src','res/myo_' + (sensor_value + 1) + '.png');
+	setChartColor(sensor_value)
+});
+
+$("#right").click(function(){
+	if(sensor_value < 7){
+		sensor_value = sensor_value  + 1;
+	}
+	else{
+		sensor_value = 0;
+	}
+	$('#sensorDisplay').attr('src','res/myo_' + (sensor_value + 1)  + '.png');
+	setChartColor(sensor_value)
+});
+
 
 
 function realtime_plot(sensor_value, count){
@@ -144,7 +178,8 @@ function realtime_plot(sensor_value, count){
 	}
 	});
 }
-
+chart.render();
+setChartColor(sensor_value);
 realtime_plot(sensor_value, dataLength)
 
 setInterval(function(){realtime_plot(sensor_value)}, updateInterval);
@@ -152,6 +187,5 @@ setInterval(function(){realtime_plot(sensor_value)}, updateInterval);
 
 }
 </script>
-
 </body>
 </html>

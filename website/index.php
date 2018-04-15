@@ -43,6 +43,7 @@
           <!-- <button type="button" class="btn btn-outline-secondary">Settings</button>  -->
         </div>
       </div>
+	
       <div class="row row2">
         <div class="col-sm align-self-start">
 
@@ -56,7 +57,20 @@
       <div class="row row2">
         <div class="col-sm align-self-center center">
           Strength<br/>
-          <input id="strength" type="range" style="width: 80%;"/>
+<?php
+		$settingsDirectory = "../settings";
+		$lockingFile = $settingsDirectory."/strength.lock";
+		$value = 50;
+		if (!file_exists($lockingFile)){
+			fclose(fopen($lockingFile, "w"));
+			$myfile = fopen($settingsDirectory."/strength.txt", "r")  or die("Unable to open file!");
+			$contents = fread($myfile, filesize($settingsDirectory."/strength.txt"));
+	  		$value  = $contents;
+			fclose($myfile);
+			unlink($settingsDirectory."/strength.lock");
+		}
+		echo('<input id="strength" type="range" style="width: 80%;" value= "'.$value.'"/><br/>');
+?>
         </div>
       </div>
       <div class="row row3">
@@ -72,7 +86,20 @@
       <div class="row row3">
         <div class="col-sm align-self-center center">
           Speed<br/>
-          <input id="speed" type="range" style="width: 80%;"/>
+<?php
+		$settingsDirectory = "../settings";
+		$lockingFile = $settingsDirectory."/speed.lock";
+		$value = 50;
+		if (!file_exists($lockingFile)){
+			fclose(fopen($lockingFile, "w"));
+			$myfile = fopen($settingsDirectory."/speed.txt", "r")  or die("Unable to open file!");
+			$contents = fread($myfile, filesize($settingsDirectory."/speed.txt"));
+			$value  = $contents;
+			fclose($myfile);
+			unlink($settingsDirectory."/speed.lock");
+		}
+		echo('<input id="speed" type="range" style="width: 80%;" value= "'.$value.'"/><br/>');
+?>
         </div>
       </div>
       <div class="row row2">
@@ -89,12 +116,67 @@
           </div>
           <div style="margin-top: ">
             Position<br/>
-            Min<input id="min" type="range" style="width: 80%;"/><br/>
-            Ref<input id="ref" type="range" style="width: 80%;"/><br/>
-            Max<input id="max" type="range" style="width: 80%;"/>
+	    <?php
+		$settingsDirectory = "../settings";
+		$lockingFile = $settingsDirectory."/minPosition.lock";
+		$value = 50;
+		if (!file_exists($lockingFile)){
+			fclose(fopen($lockingFile, "w"));
+			$myfile = fopen($settingsDirectory."/minPosition.txt", "r")  or die("Unable to open file!");
+			$contents = fread($myfile, filesize($settingsDirectory."/minPosition.txt"));
+	  		$value  = $contents;
+			fclose($myfile);
+			unlink($settingsDirectory."/minPosition.lock");
+		}
+		echo('Min<input id="min" type="range" style="width: 80%;" value= "'.$value .'"/><br/>');
+	
+		$lockingFile = $settingsDirectory."/refPosition.lock";
+		$value = 50;
+		if (!file_exists($lockingFile)){
+			fclose(fopen($lockingFile, "w"));
+			$myfile = fopen($settingsDirectory."/refPosition.txt", "r")  or die("Unable to open file!");
+			$contents = fread($myfile, filesize($settingsDirectory."/refPosition.txt"));
+	  		$value = $contents ;
+			fclose($myfile);
+			unlink($settingsDirectory."/refPosition.lock");
+		}
+		echo('Ref<input id="ref" type="range" style="width: 80%;" value= "'.$contents.'"/><br/>');
+		$lockingFile = $settingsDirectory."/maxPosition.lock";
+		$value = 50;
+		if (!file_exists($lockingFile)){
+			$myfile = fopen($settingsDirectory."/maxPosition.txt", "r")  or die("Unable to open file!");
+			$contents = fread($myfile, filesize($settingsDirectory."/maxPosition.txt"));
+			$value = $contents ;
+			fclose($myfile);
+			unlink($settingsDirectory."/maxPosition.lock");
+		}
+		echo('Max<input id="max" type="range" style="width: 80%;" value= "'.$contents.'"/><br/>');
+	    ?>
           </div>
         </div>
       </div>
+	<div class="row row3">
+		<div class="col center align-items-center">
+			<img src="res/piston.svg"  style="width:20%; "> </br>
+		</div>
+		<div class="col  center align-items-center">
+			<img src="res/piston.svg"  style="width:30%; "> </br>
+		</div>
+		<div class="col center align-items-center">
+			<img src="res/piston.svg"  style="width:40%; "> </br>
+		</div>
+	</div>
+	<div class="row row3">
+		<div class="col-sm align-self-start center ">
+			<input type="radio" name="motor" value="small" checked>
+		</div>
+		<div class="col-sm align-self-center center align-items-center">
+			<input type="radio" name="motor" value="medium">
+		</div>
+		<div class="col-sm align-self-end center align-items-center">
+			<input type="radio" name="motor" value="big">
+		</div>
+	</div>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -178,7 +260,7 @@
         link = 'updateSettings.php?speed=' + $(this).val();
         $.ajax({ url: link });
       });
-      $( "#strength" ).change(function() {
+	$( "#strength" ).change(function() {
         link = 'updateSettings.php?strength=' + $(this).val();
         $.ajax({ url: link });
       });
@@ -194,6 +276,22 @@
       $( "#disconnect" ).click(function() {
         $.ajax({ url: 'stopDevice.php' , complete: function(){window.location.href='index.php';}});
       });
+	$(document).ready(function() {
+	    $('input[type=radio][name=motor]').change(function() {
+		var value = 0;
+		if (this.value == 'small') {
+		    value = 5.5;
+		}
+		else if (this.value == 'medium') {
+		    value = 4.5;
+		}
+		else if (this.value == 'big') {
+		    value = 5.5;
+		}
+		link = 'updateSettings.php?motor=' + value;
+        	$.ajax({ url: link });
+	    });
+	});
     </script>
   </body>
 </html>

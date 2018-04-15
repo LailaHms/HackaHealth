@@ -1,10 +1,4 @@
 <?php
-echo count($_GET);
-echo $_GET['speed'];
-echo $_GET['strength'];
-echo $_GET['minPosition'];
-echo $_GET['maxPosition'];
-echo $_GET['referencePosition'];
 $settingsDirectory = "../settings";
 if (!is_dir($settingsDirectory)) {
     mkdir($settingsDirectory);         
