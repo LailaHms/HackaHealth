@@ -1,12 +1,3 @@
-'''
-	Original by dzhu
-		https://github.com/dzhu/myo-raw
-
-	Edited by Fernando Cosentino
-		http://www.fernandocosentino.net/pyoconnect
-'''
-
-
 from __future__ import print_function
 
 import enum
@@ -16,7 +7,6 @@ import sys
 import threading
 import time
 import numpy as np
-
 import serial
 from serial.tools.list_ports import comports
 
@@ -51,8 +41,9 @@ class Pose(enum.Enum):
     WAVE_OUT = 3
     FINGERS_SPREAD = 4
     THUMB_TO_PINKY = 5
-    UNKNOWN = 255	 
-    
+    UNKNOWN = 255
+
+
 class Packet(object):
     def __init__(self, ords):
         self.typ = ords[0]
@@ -193,7 +184,7 @@ class MyoRaw(object):
         self.pose_handlers = []
         self.last_time = 0
         self.emg_data = []
-        self.emg_rate = 50 
+        self.emg_rate = 50
         self.nChan = 8
         self.slidingWindowTime = 50
         self.windowTime = 250
@@ -201,6 +192,7 @@ class MyoRaw(object):
         self.nOverlap = int(self.emg_rate * self.slidingWindowTime/1000)
         self.myo_emg_buffer = np.zeros([self.nChan,self.winsize])
         self.counter = 0
+
 
     def detect_tty(self):
         for p in comports():
@@ -307,14 +299,15 @@ class MyoRaw(object):
                 gyro = vals[7:10]
                 self.on_imu(quat, acc, gyro)
             elif attr == 0x23:
-                typ, val, xdir, _,_,_ = unpack('6B', pay)
-
-                if typ == 1: # on arm
-                    self.on_arm(Arm(val), XDirection(xdir))
-                elif typ == 2: # removed from arm
-                    self.on_arm(Arm.UNKNOWN, XDirection.UNKNOWN)
-                elif typ == 3: # pose
-                    self.on_pose(Pose(val))
+                pass
+##                typ, val, xdir = unpack('3B', pay)
+##
+##                if typ == 1: # on arm
+##                    self.on_arm(Arm(val), XDirection(xdir))
+##                elif typ == 2: # removed from arm
+##                    self.on_arm(Arm.UNKNOWN, XDirection.UNKNOWN)
+##                elif typ == 3: # pose
+##                    self.on_pose(Pose(val))
             else:
                 print('data with unknown attr: %02X %s' % (attr, p))
 
@@ -340,7 +333,7 @@ class MyoRaw(object):
         '''
 
         self.write_attr(0x28, b'\x01\x00')
-        #self.write_attr(0x19, b'\x01\x03\x01\x01\x00')
+        self.write_attr(0x19, b'\x01\x03\x01\x01\x00')
         self.write_attr(0x19, b'\x01\x03\x01\x01\x01')
 
     def mc_start_collection(self):
@@ -383,8 +376,9 @@ class MyoRaw(object):
 
     def vibrate(self, length):
         if length in xrange(1, 4):
+            pass
             ## first byte tells it to vibrate; purpose of second byte is unknown
-            self.write_attr(0x19, pack('3B', 3, 1, length))
+            ## self.write_attr(0x19, pack('3B', 3, 1, length))
 
 
     def add_emg_handler(self, h):
@@ -401,11 +395,26 @@ class MyoRaw(object):
 
 
     def on_emg(self, emg, moving):
-        #self.myo_emg_buffer = np.c_[self.myo_emg_buffer[:,1:self.winsize],emg]
-        self.myo_emg_buffer[:,0:-1] = self.myo_emg_buffer[:,1:]
+        print(time.time())
+        return
+        #data = []
+        #
+        #for comp in emg:
+        #    data.append(str(comp).ljust(5))
+        #    self.counter = self.counter + 1
+        
+        #self.myo_emg_buffer  = np.c_[self.myo_emg_buffer[:,1:],emg]
+        self.myo_emg_buffer[:,:-1] = self.myo_emg_buffer[:,1:]
         self.myo_emg_buffer[:,-1] = emg
 
-        # print('\r' + ''.join('[{0}]'.forma
+        # print(self.myo_buffer)
+        # print('\r' + ''.join('[{0}]'.format(p) for p in data), end='')
+        #if self.counter == (self.nOverlap*self.nChan) :
+        #    # print(self.counter)
+        #    # print('send data')
+        # print(time.time()-self.last_time)
+        # self.last_time = time.time()
+        #    self.counter = 0
         #for h in self.emg_handlers:
         #    h(emg, moving)
 
@@ -492,9 +501,11 @@ if __name__ == '__main__':
                         raise KeyboardInterrupt()
                     elif ev.type == KEYDOWN:
                         if K_1 <= ev.key <= K_3:
-                            m.vibrate(ev.key - K_0)
+                            pass
+                            #m.vibrate(ev.key - K_0)
                         if K_KP1 <= ev.key <= K_KP3:
-                            m.vibrate(ev.key - K_KP0)
+                            pass
+                            #m.vibrate(ev.key - K_KP0)
 
     except KeyboardInterrupt:
         pass

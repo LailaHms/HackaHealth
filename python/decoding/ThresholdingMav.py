@@ -22,17 +22,25 @@ class ThresholdingMav(EmgDecoding):
 
     def calibrate_threshold(self,restingEmgSignals,xTimes=5):
         """ restingEmgSignals -- list (nChans) of list (mSamples) """
-        self._threshold = np.zeros(len(restingEmgSignals))
-        for i,ch in enumerate(restingEmgSignals):
-            mav = np.zeros((len(ch)-1)/self._slidingWindowSamples)
-            for j in xrange(self._slidingWindowSamples,len(restingEmgSignals[0]),self._slidingWindowSamples):
-                mav[j/self._slidingWindowSamples-1] = self.compute_mav(ch[j-self._slidingWindowSamples:j])
-            meanMav = np.mean(mav)
-            stdMav = np.std(mav)
-            self._threshold[i] = meanMav+xTimes*stdMav
+        self._threshold = np.zeros(len(restingEmgSignals[0]))
+
+        count = 1
+        for i,window in enumerate(restingEmgSignals):
+            if np.sum(np.mean(np.abs(window),axis=1))==0:continue
+            if count==1:calibrationData = np.mean(np.abs(window),axis=1)
+            else: calibrationData = np.c_[calibrationData,np.mean(np.abs(window),axis=1)]
+            count+=1
+
+        meanMav = np.mean(calibrationData,axis=1)
+        stdMav = np.std(calibrationData,axis=1)
+        self._threshold = meanMav+xTimes*stdMav
+
+    def print_thresholds(self):
+        print self._threshold
 
     def decode(self,emgSignals):
         meanAbsoluteValues = [self.compute_mav(ch) for ch in emgSignals]
+        print meanAbsoluteValues[0]
         flex = 0
         ext = 0
         for muscle,mav,thr in zip(self._electrodesToMusclesMap,meanAbsoluteValues,self._threshold):
