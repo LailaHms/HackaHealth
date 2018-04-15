@@ -2,6 +2,7 @@ import sys, os
 
 def read_value(variable, path = os.getcwd(), verbose = False):
 
+    value = False
     # wait while le fichier .lock existe
     while(os.path.isfile(os.path.join(path, variable + ".lock"))):
         if verbose: print "Waiting"
