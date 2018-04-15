@@ -25,6 +25,8 @@ class ClosedLoopEmgControl():
 
         self.init_decoder()
         self.init_myo()
+        time.sleep(10)
+        print "Ended initializations ... pisellino ;) "
         self.init_motor()
 
     def init_decoder(self):
@@ -38,7 +40,7 @@ class ClosedLoopEmgControl():
         self._motorCnt = MotorController(self._outputRate)
 
     def _init_threads(self):
-        self._threadEmg = threading.Thread(name="emgThread",target=self._emgCnt.read_continuous_data,args=(self._dataQueue,))
+        # self._threadEmg = threading.Thread(name="emgThread",target=self._emgCnt.read_continuous_data,args=(self._dataQueue,))
         self._threadMotor = threading.Thread(name="motorThread",target=self._motorCnt.run_motor,args=(self._dataQueue,))
 
     def _start_threads(self):
@@ -49,18 +51,26 @@ class ClosedLoopEmgControl():
         self._dataQueue = Queue()
         self._init_threads()
         self._start_threads()
-        self.check_stop()
+
+        oldTime = -100
+        t = time.time()
+        while not self._stopControl:
+            self._myo.run(timeout=1)
+            if time.time()-oldTime>= self._outputPeriod:
+                oldTime = time.time()
+                self._emgCnt.decode(self._dataQueue)
+            # self.check_stop()
 
     def check_stop(self):
         while True:
             time.sleep(0.1)
-            if read_value("disconnet"):
+            # if read_value("disconnet"): # TODO
+            if False:
                 self._stopControl = True
                 self._emgCnt.set_stopControl(True)
                 self._motorCnt.set_stopControl(True)
                 self._threadEmg.join()
                 self._threadMotor.join()
-
                 break
 
     def calibrate(self):
@@ -70,4 +80,5 @@ class ClosedLoopEmgControl():
                 if self._decoderType == "thresholdingMav":
                     emgSignals = self._emgCnt.get_myo_data(self._decoderInfo["calibrationTime"])
                     self._decoder.calibrate_threshold(emgSignals)
+                    self._decoder.print_thresholds()
                 break

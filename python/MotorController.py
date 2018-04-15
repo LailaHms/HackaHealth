@@ -2,7 +2,7 @@ import numpy as np
 import time
 import logging
 from Queue import Queue, Empty
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
 
 logging.basicConfig(level=logging.DEBUG,format="(%(threadName)-9s) %(message)s",)
 
