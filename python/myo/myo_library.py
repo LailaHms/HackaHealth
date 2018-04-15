@@ -406,9 +406,9 @@ class MyoRaw(object):
         # print(self.myo_buffer)
         # print('\r' + ''.join('[{0}]'.format(p) for p in data), end='')
         if self.counter == (self.nOverlap*self.nChan) :
-            print(self.counter)
-            print('send data')
-            print(time.time()-self.last_time)
+            # print(self.counter)
+            # print('send data')
+            # print(time.time()-self.last_time)
             self.last_time = time.time()
             self.counter = 0
         for h in self.emg_handlers:
