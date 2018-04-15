@@ -23,6 +23,7 @@
               echo '<button type="button" id="connect" class="btn btn-success">Connect</button>';
             }
             else{
+               echo '<img src="res/wifi_green.png" style="width:20%; margin-right: 10px;">';
               echo '<button type="button" id="disconnect" class="btn btn-danger">Disconnect</button>';
             }
           ?>
@@ -169,10 +170,10 @@
         $.ajax({ url: link });
       });
       $( "#connect" ).click(function() {
-        $.ajax({ url: 'startDevice.php' });
+        $.ajax({ url: 'startDevice.php' , complete: function(){window.location.href='index.php';}});
       });
-      $( "#dicconnect" ).click(function() {
-        $.ajax({ url: 'stopDevice.php' });
+      $( "#disconnect" ).click(function() {
+        $.ajax({ url: 'stopDevice.php' , complete: function(){window.location.href='index.php';}});
       });
     </script>
   </body>
