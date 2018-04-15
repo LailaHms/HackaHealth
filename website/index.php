@@ -30,7 +30,7 @@
         <div class="col align-self-center">
           <center>
           <?php
-              echo '<button type="button" id="calibrate" class="btn btn-danger">Calibrate</button>';
+              echo '<button type="button" id="calibrate" class="btn btn-warning">Calibrate</button>';
           ?>
         </center>
         </div>
