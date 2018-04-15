@@ -15,8 +15,9 @@ class EmgController():
         self._slidingWindowSamples = int(slidingWindowSamples)
         self._stopControl = False
         self._decoder = emgDecoder
-        self._myo = MyoRaw(None)
-        self._myo.connect()
+
+ 	self._myo = MyoRaw(None)
+   
 
     def get_myo_data(self,nSeconds):
         oldTime = -100
@@ -25,21 +26,14 @@ class EmgController():
         while time.time()-tStart<nSeconds:
             self._myo.run(timeout=1)
             if time.time()-oldTime>= self._outputPeriod:
-                oldTime = time.time()
-                data.append(self._myo.myo_emg_buffer)
+                oldTime = time.time() 
+                if np.sum(self._myo.myo_emg_buffer)==0:
+                    tStart=time.time()
+                    print "still initializing...."
+                else:
+                    data.append(self._myo.myo_emg_buffer)
         return data
-
-    def read_continuous_data_thread(self,queue):
-        oldTime = -100
-        t = time.time()
-        while not self._stopControl:
-            self._myo.run(timeout=1)
-            if time.time()-oldTime>= self._outputPeriod:
-                oldTime = time.time()
-                velocity = self._decoder.decode(self._myo.myo_emg_buffer)
-                queue.put(velocity)
-                logging.debug("Decoded emg data! velocity %.1f"%(velocity))
-
+    
     def decode(self,queue):
         velocity = self._decoder.decode(self._myo.myo_emg_buffer)
         queue.put(velocity)

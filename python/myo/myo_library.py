@@ -19,6 +19,7 @@ import numpy as np
 
 import serial
 from serial.tools.list_ports import comports
+import sys
 
 from common import *
 
@@ -401,13 +402,8 @@ class MyoRaw(object):
 
 
     def on_emg(self, emg, moving):
-        #self.myo_emg_buffer = np.c_[self.myo_emg_buffer[:,1:self.winsize],emg]
         self.myo_emg_buffer[:,0:-1] = self.myo_emg_buffer[:,1:]
         self.myo_emg_buffer[:,-1] = emg
-
-        # print('\r' + ''.join('[{0}]'.forma
-        #for h in self.emg_handlers:
-        #    h(emg, moving)
 
     def on_imu(self, quat, acc, gyro):
         for h in self.imu_handlers:
@@ -426,7 +422,7 @@ if __name__ == '__main__':
     try:
         import pygame
         from pygame.locals import *
-        HAVE_PYGAME = True
+        HAVE_PYGAME = False
     except ImportError:
         HAVE_PYGAME = False
 
