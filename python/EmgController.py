@@ -29,17 +29,21 @@ class EmgController():
                 data.append(self._myo.myo_emg_buffer)
         return data
 
-    def read_continuous_data(self,queue):
+    def read_continuous_data_thread(self,queue):
         oldTime = -100
         t = time.time()
         while not self._stopControl:
-            #time.sleep(0.001)
             self._myo.run(timeout=1)
             if time.time()-oldTime>= self._outputPeriod:
                 oldTime = time.time()
                 velocity = self._decoder.decode(self._myo.myo_emg_buffer)
                 queue.put(velocity)
                 logging.debug("Decoded emg data! velocity %.1f"%(velocity))
+
+    def decode(self,queue):
+        velocity = self._decoder.decode(self._myo.myo_emg_buffer)
+        queue.put(velocity)
+        logging.debug("Decoded emg data! velocity %.1f"%(velocity))
 
     def set_stopControl(self,val):
         self._stopControl = val
