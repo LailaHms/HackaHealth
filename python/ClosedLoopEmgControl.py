@@ -25,6 +25,8 @@ class ClosedLoopEmgControl():
 
         self.init_decoder()
         self.init_myo()
+        time.sleep(10)
+        print "Ended initializations ... pisellino ;) "
         self.init_motor()
 
     def init_decoder(self):
@@ -69,7 +71,6 @@ class ClosedLoopEmgControl():
             if read_value("calibrate"):
                 if self._decoderType == "thresholdingMav":
                     emgSignals = self._emgCnt.get_myo_data(self._decoderInfo["calibrationTime"])
-                    print emgSignals
-                    print np.array(emgSignals).shape()
                     self._decoder.calibrate_threshold(emgSignals)
+                    self._decoder.print_thresholds()
                 break

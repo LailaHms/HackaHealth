@@ -11,7 +11,8 @@ def read_value(variable, path = os.getcwd(), verbose = False):
 
     with open(os.path.join(path, variable + ".txt")) as f:
         first_line = f.readline().rstrip()
-        value = float(first_line)
+        if value: value = float(first_line)
+        else: value=True
 
     return value
 

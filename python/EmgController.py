@@ -2,7 +2,7 @@ import numpy as np
 import time
 import logging
 from Queue import Queue, Empty
-# from myo import MyoRaw
+from myo import MyoRaw
 import threading
 
 logging.basicConfig(level=logging.DEBUG,format="(%(threadName)-9s) %(message)s",)
@@ -15,16 +15,15 @@ class EmgController():
         self._slidingWindowSamples = int(slidingWindowSamples)
         self._stopControl = False
         self._decoder = emgDecoder
-        # self._myo = MyoRaw(None)
-        # self._myo.connect()
+        self._myo = MyoRaw(None)
+        self._myo.connect()
 
     def get_myo_data(self,nSeconds):
-        # return np.random.rand(6,nSeconds)
         oldTime = -100
         tStart = time.time()
         data = []
         while time.time()-tStart<nSeconds:
-            self._myo.run(timeout=.1)
+            self._myo.run(timeout=1)
             if time.time()-oldTime>= self._outputPeriod:
                 oldTime = time.time()
                 data.append(self._myo.myo_emg_buffer)
@@ -34,15 +33,13 @@ class EmgController():
         oldTime = -100
         t = time.time()
         while not self._stopControl:
-            # self._myo.run(timeout=.1)
+            #time.sleep(0.001)
+            self._myo.run(timeout=1)
             if time.time()-oldTime>= self._outputPeriod:
                 oldTime = time.time()
-                print "shit"
-                # logging.debug(self._myo.myo_emg_buffer)
-                # velocity = self._decoder.decode(self._myo.myo_emg_buffer)
-                velocity = 1
+                velocity = self._decoder.decode(self._myo.myo_emg_buffer)
                 queue.put(velocity)
-                logging.debug("Decoded emg data!")
+                logging.debug("Decoded emg data! velocity %.1f"%(velocity))
 
     def set_stopControl(self,val):
         self._stopControl = val
