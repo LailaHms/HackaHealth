@@ -69,5 +69,7 @@ class ClosedLoopEmgControl():
             if read_value("calibrate"):
                 if self._decoderType == "thresholdingMav":
                     emgSignals = self._emgCnt.get_myo_data(self._decoderInfo["calibrationTime"])
-                    self._decoder.calibrate_threshold(emgSignals)
+                    print emgSignals
+                    print np.array(emgSignals).shape()
+                    # self._decoder.calibrate_threshold(emgSignals)
                 break

@@ -19,18 +19,27 @@ class EmgController():
         self._myo.connect()
 
     def get_myo_data(self,nSeconds):
-        return np.random.rand(6,nSeconds)
+        # return np.random.rand(6,nSeconds)
+        oldTime = -100
+        tStart = time.time()
+        data = []
+        while time.time()-tStart<nSeconds:
+            self._myo.run(timeout=.1)
+            if time.time()-oldTime>= self._outputPeriod:
+                oldTime = time.time()
+                data.append(self._myo.myo_emg_buffer)
+        return data
 
     def read_continuous_data(self,queue):
         oldTime = -100
         t = time.time()
         while not self._stopControl:
-            self._myo.run(timeout=1)
+            self._myo.run(timeout=.1)
             if time.time()-oldTime>= self._outputPeriod:
                 oldTime = time.time()
-                emgWindow = self._myo.myo_emg_buffer
-                logging.debug(emgWindow)
-                velocity = self._decoder.decode(emgWindow)
+                print "shit"
+                logging.debug(self._myo.myo_emg_buffer)
+                velocity = self._decoder.decode(self._myo.myo_emg_buffer)
                 queue.put(velocity)
                 logging.debug("Decoded emg data!")
 

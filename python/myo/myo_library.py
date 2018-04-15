@@ -184,7 +184,7 @@ class MyoRaw(object):
         self.pose_handlers = []
         self.last_time = 0
         self.emg_data = []
-        self.emg_rate = 200
+        self.emg_rate = 50
         self.nChan = 8
         self.slidingWindowTime = 50
         self.windowTime = 250
